@@ -162,7 +162,7 @@ void PitchShifterAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
             
             const int range = 5;
             long start = 0;
-            
+        
             struct timespec ts;
             clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
             long now = ts.tv_sec * 1000 + ts.tv_nsec / 1000000ULL;
