@@ -1,22 +1,3 @@
-//
-//  VUAnalysis.h
-//
-//
-//  Copyright © 2019 Eric Tarr. All rights reserved.
-//  Code may not be distributed without permission
-//
-//  This class can be used to analyze a conventional bi-polar audio signal over a full-scale
-//  range of -1 to +1. It converts that signal into a uni-polar measurement of signal amplitude
-//  over a range of 0 to +1. 
-//
-//  For this implementation, I used first-order smoothing. Values for the smoothing were
-//  selected to match the performance of the channel meter in Logic
-//
-//  I attempted to use second-order smoothing based on the following paper, but it was going
-//  unstable for various sampling rates.
-//  https://asa.scitation.org/doi/full/10.1121/1.2387130
-//  "A model of the VU (volume-unit) meter, with speech applications" (JASA, 2007)
-
 #ifndef VUAnalysis_h
 #define VUAnalysis_h
 

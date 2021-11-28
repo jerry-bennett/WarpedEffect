@@ -19,6 +19,7 @@
 class PitchShifterAudioProcessor  : public AudioProcessor
 {
 public:
+    
     //==============================================================================
     PitchShifterAudioProcessor();
     ~PitchShifterAudioProcessor();
@@ -66,6 +67,7 @@ public:
 private:
     PitchShifter pitchShifter;
     
+    float pitchTemp = 0.f;
     float gainSmooth = 0.0f;
     float alpha = 0.995f;
     VUAnalysis vuAnalysis;

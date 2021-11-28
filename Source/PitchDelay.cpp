@@ -1,9 +1,3 @@
-//
-//  PitchDelay.cpp
-//
-//  Created by Eric Tarr on 2/6/20.
-//  Copyright © 2020 Eric Tarr. All rights reserved.
-//
 
 #include "PitchDelay.hpp"
 
@@ -30,10 +24,8 @@ PitchDelay::~PitchDelay(){
 
 float PitchDelay::processSample(float x, int channel, float & angle){
     
-//    if (delay[channel] < 1.f){
-//        return x;
-//    }
-//    else{
+    
+    
         
         delay[channel] += delta;
         if (delta <= 0.f && delay[channel] < 2.f){

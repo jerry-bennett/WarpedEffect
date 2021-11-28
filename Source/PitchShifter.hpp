@@ -1,10 +1,3 @@
-//
-//  PitchShifter.hpp
-//
-//  Created by Eric Tarr on 2/6/20.
-//  Copyright © 2020 Eric Tarr. All rights reserved.
-//
-
 #ifndef PitchShifter_hpp
 #define PitchShifter_hpp
 

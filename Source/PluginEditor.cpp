@@ -19,7 +19,7 @@ PitchShifterAudioProcessorEditor::PitchShifterAudioProcessorEditor (PitchShifter
     // editor's size to whatever you need it to be.
     setSize (400, 300);
     
-    pitchKnob.addListener(this);
+    //pitchKnob.addListener(this);
     pitchKnob.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
     pitchKnob.setBounds(50,74,100,100);
     pitchKnob.setTextBoxStyle(Slider::TextBoxBelow, false, 50, 30);
@@ -29,7 +29,7 @@ PitchShifterAudioProcessorEditor::PitchShifterAudioProcessorEditor (PitchShifter
     
     
     
-    sliderAttachment = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.state,"PITCH",pitchKnob);
+    sliderAttachment.emplace_back(new AudioProcessorValueTreeState::SliderAttachment(processor.state,"PITCH",pitchKnob));
     
     //pitchKnob.addListener(this);
     gainKnob.setSliderStyle(Slider::RotaryHorizontalVerticalDrag);
@@ -39,7 +39,7 @@ PitchShifterAudioProcessorEditor::PitchShifterAudioProcessorEditor (PitchShifter
     //pitchKnob.setValue(0.f);
     addAndMakeVisible(gainKnob);
     
-    sliderAttachment = std::make_unique<AudioProcessorValueTreeState::SliderAttachment>(processor.state,"GAIN",gainKnob);
+    sliderAttachment.emplace_back(new AudioProcessorValueTreeState::SliderAttachment(processor.state,"GAIN",gainKnob));
     
     meter.setBounds(300, 50, 20, 100);
     addAndMakeVisible(meter);
@@ -70,9 +70,7 @@ void PitchShifterAudioProcessorEditor::resized()
 }
 
 void PitchShifterAudioProcessorEditor::sliderValueChanged(Slider *slider){
-    if (slider == &pitchKnob){
-        processor.pitchValue = pitchKnob.getValue();
-    }
+    
 }
 
 void PitchShifterAudioProcessorEditor::timerCallback(){

@@ -1,10 +1,3 @@
-//
-//  PitchShifter.cpp
-//
-//  Created by Eric Tarr on 2/6/20.
-//  Copyright © 2020 Eric Tarr. All rights reserved.
-//
-
 #include "PitchShifter.hpp"
 
 
@@ -67,6 +60,8 @@ void PitchShifter::setFs(float Fs){
 
 
 void PitchShifter::setPitch(float semitone){
+
+    
     this->semitone = semitone;
     tr = powf(2.f,semitone/12.f);
     delta = 1.f - tr;
@@ -75,6 +70,8 @@ void PitchShifter::setPitch(float semitone){
     freq = 1.f/period;
     
     angleChange = freq * (2.f*M_PI) / Fs;
+    
+
     
     pitchDelay1.setPitch(semitone);
     pitchDelay2.setPitch(semitone);

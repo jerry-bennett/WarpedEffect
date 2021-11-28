@@ -36,7 +36,9 @@ AudioProcessorValueTreeState::ParameterLayout PitchShifterAudioProcessor::create
     
     params.push_back(std::make_unique<AudioParameterFloat>("PITCH","Pitch",-12.f,12.f,0.f));
     
-    params.push_back(std::make_unique<AudioParameterFloat>("GAIN","Gain",0.f,1.f,1.f));
+    NormalisableRange<float> gainRange(0.f,1.f,.01f);
+    gainRange.setSkewForCentre(0.2f);
+    params.push_back(std::make_unique<AudioParameterFloat>("GAIN","Gain",gainRange,1.f));
     
     return {params.begin() , params.end()};
 }
@@ -106,7 +108,7 @@ void PitchShifterAudioProcessor::changeProgramName (int index, const String& new
 //==============================================================================
 void PitchShifterAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    pitchShifter.setFs(48000);
+    pitchShifter.setFs(sampleRate);
     vuAnalysis.setSampleRate(sampleRate);
 }
 
@@ -149,22 +151,35 @@ void PitchShifterAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
     
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
-
-    float pitchValue = *state.getRawParameterValue("PITCH");
-    pitchShifter.setPitch(pitchValue);
     
+    //float pitchValue = *state.getRawParameterValue("PITCH"); //need to change to oscilator
+
     float gainValue = *state.getRawParameterValue("GAIN");
     
     for (int channel = 0; channel < totalNumInputChannels; ++channel)
     {
         for (int n = 0; n < buffer.getNumSamples() ; ++n){
+            
+            const int range = 5;
+            long start = 0;
+            
+            struct timespec ts;
+            clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
+            long now = ts.tv_sec * 1000 + ts.tv_nsec / 1000000ULL;
+            float ellapsed = (now - start) / 50.0f;
+            if (start == 0) { start = now; }
+            
+            pitchTemp = sin(ellapsed/range) * range;
+            pitchShifter.setPitch(pitchTemp);
+            
             float x = buffer.getReadPointer(channel)[n];
             float y = pitchShifter.processSample(x, channel);
-            gainSmooth = (1.f-alpha)*gainValue + alpha*gainSmooth;//**
-            float out = y * gainSmooth;
+            gainSmooth = (1.f-alpha)*gainValue + alpha*gainSmooth;
+            float out = y; //* gainSmooth;
             buffer.getWritePointer(channel)[n] = out;
             // Metering
-            outValue[channel] = vuAnalysis.processSample(out, channel);
+            //outValue[channel] = vuAnalysis.processSample(out, channel);
+            
         }
     }
     meterValue = jmax(outValue[0],outValue[1]);

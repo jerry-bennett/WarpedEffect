@@ -1,14 +1,3 @@
-//
-//  SimpleMeter.h
-//
-//
-//  Copyright © 2019 Eric Tarr. All rights reserved.
-//  Code may not be distributed without permission
-//
-//  Based on Inter-App Audio Plugin (https://docs.juce.com/master/tutorial_plugin_examples.html )
-//
-//  This class creates a meter component which draws a value between 0 and 1
-
 #ifndef SimpleMeter_h
 #define SimpleMeter_h
 
