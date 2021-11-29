@@ -65,6 +65,7 @@ public:
     std::atomic<float> meterValue;
     
 private:
+    AudioProcessorValueTreeState treeState;
     PitchShifter pitchShifter;
     
     float pitchTemp = 0.f;

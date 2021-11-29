@@ -21,7 +21,8 @@ PitchShifterAudioProcessor::PitchShifterAudioProcessor()
                       #endif
                        .withOutput ("Output", AudioChannelSet::stereo(), true)
                      #endif
-                       ),state(*this,nullptr,Identifier("PitchParameters"),createParameterLayout())
+                       ),state(*this,nullptr,Identifier("PitchParameters"),createParameterLayout()),
+                        treeState(*this, nullptr, ProjectInfo::projectName, createParameterLayout())
 #endif
 {
 }
@@ -151,8 +152,6 @@ void PitchShifterAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
     
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
-    
-    //float pitchValue = *state.getRawParameterValue("PITCH"); //need to change to oscilator
 
     float gainValue = *state.getRawParameterValue("GAIN");
     
@@ -160,9 +159,9 @@ void PitchShifterAudioProcessor::processBlock (AudioBuffer<float>& buffer, MidiB
     {
         for (int n = 0; n < buffer.getNumSamples() ; ++n){
             
-            const int range = 5;
+            const int range = 3; //would like to make it from 0 - -5 then back to 0
             long start = 0;
-        
+
             struct timespec ts;
             clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
             long now = ts.tv_sec * 1000 + ts.tv_nsec / 1000000ULL;
